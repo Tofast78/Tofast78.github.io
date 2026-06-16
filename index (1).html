@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tofast78 · Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --bg:#080c10;
+      --surf:#0f1923;
+      --surf2:#141d28;
+      --border:#1c2836;
+      --a1:#4facfe;
+      --a2:#00f2fe;
+      --green:#43e97b;
+      --muted:#5a7a99;
+      --text:#dce8f5;
+      --text-dim:#8fafc8;
+    }
+
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+    /* ── CANVAS BG ── */
+    #bg-canvas{position:fixed;inset:0;z-index:0;opacity:.45;pointer-events:none}
+
+    /* ── HEADER ── */
+    header{
+      position:relative;z-index:1;
+      padding:80px 24px 64px;
+      text-align:center;
+    }
+
+    /* avatar ring */
+    .avatar-wrap{
+      position:relative;width:120px;height:120px;
+      margin:0 auto 28px;
+    }
+    .avatar-wrap svg.ring{
+      position:absolute;inset:-8px;width:calc(100% + 16px);height:calc(100% + 16px);
+      animation:spin-ring 12s linear infinite;
+    }
+    @keyframes spin-ring{to{transform:rotate(360deg)}}
+    .avatar{
+      width:120px;height:120px;border-radius:50%;
+      object-fit:cover;display:block;
+      border:2px solid rgba(79,172,254,.3);
+      background:var(--surf);
+    }
+
+    .eyebrow{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.75rem;color:var(--a1);
+      letter-spacing:.2em;text-transform:uppercase;
+      margin-bottom:12px;opacity:.8;
+    }
+
+    h1{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(2.8rem,8vw,5rem);
+      font-weight:800;line-height:1;
+      background:linear-gradient(135deg,#fff 0%,var(--a1) 50%,var(--a2) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      letter-spacing:-2px;
+    }
+
+    .bio{
+      margin-top:14px;color:var(--text-dim);
+      font-size:1rem;font-weight:300;
+      max-width:440px;margin-inline:auto;
+      line-height:1.6;
+    }
+
+    .stats-row{
+      display:flex;justify-content:center;gap:0;
+      margin-top:36px;flex-wrap:wrap;
+      border:1px solid var(--border);
+      border-radius:16px;
+      max-width:380px;margin-inline:auto;
+      overflow:hidden;
+      background:var(--surf);
+    }
+    .stat{
+      flex:1;padding:18px 12px;text-align:center;
+      border-right:1px solid var(--border);
+    }
+    .stat:last-child{border-right:none}
+    .stat-num{
+      font-family:'Syne',sans-serif;
+      font-size:1.6rem;font-weight:700;
+      background:linear-gradient(135deg,var(--a1),var(--a2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+
+    .gh-btn{
+      display:inline-flex;align-items:center;gap:8px;
+      margin-top:28px;padding:12px 28px;
+      background:var(--surf);
+      border:1px solid var(--border);border-radius:12px;
+      color:var(--text-dim);text-decoration:none;
+      font-size:.875rem;font-weight:500;
+      transition:all .25s;
+    }
+    .gh-btn:hover{border-color:var(--a1);color:var(--a1);background:rgba(79,172,254,.06)}
+
+    /* ── DIVIDER ── */
+    .divider{
+      max-width:1100px;margin:56px auto 0;padding:0 24px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .divider-label{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.7rem;color:var(--a1);
+      text-transform:uppercase;letter-spacing:.15em;
+      white-space:nowrap;opacity:.9;
+    }
+    .divider-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+    /* ── PAGES GRID ── */
+    .pages-grid{
+      max-width:1100px;margin:20px auto 0;padding:0 24px;
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;
+    }
+
+    .page-card{
+      position:relative;overflow:hidden;
+      background:var(--surf);
+      border:1px solid rgba(0,242,254,.2);
+      border-radius:16px;padding:24px;
+      display:flex;flex-direction:column;gap:12px;
+      text-decoration:none;color:inherit;
+      transition:transform .25s,box-shadow .25s,border-color .25s;
+    }
+    .page-card::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 90% 60% at 50% -30%,rgba(0,242,254,.07) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .page-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(0,242,254,.5);
+      box-shadow:0 16px 40px rgba(0,242,254,.08),0 0 0 1px rgba(0,242,254,.15);
+    }
+
+    .page-top{display:flex;align-items:center;gap:10px}
+    .live-badge{
+      display:flex;align-items:center;gap:5px;
+      font-size:.65rem;font-family:'JetBrains Mono',monospace;
+      color:var(--green);letter-spacing:.08em;text-transform:uppercase;
+      padding:3px 9px;border:1px solid rgba(67,233,123,.25);border-radius:20px;
+      background:rgba(67,233,123,.06);flex-shrink:0;
+    }
+    .live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    .page-name{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.9rem;font-weight:500;
+      color:var(--a2);word-break:break-word;
+    }
+    .page-desc{font-size:.82rem;color:var(--muted);line-height:1.55;flex:1}
+    .page-url{font-size:.7rem;color:var(--a1);opacity:.6;font-family:'JetBrains Mono',monospace;word-break:break-all}
+    .open-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      margin-top:4px;padding:8px 16px;width:fit-content;
+      background:rgba(0,242,254,.08);
+      border:1px solid rgba(0,242,254,.25);border-radius:10px;
+      color:var(--a2);font-size:.78rem;font-weight:600;
+      transition:background .2s,border-color .2s;
+    }
+    .page-card:hover .open-btn{background:rgba(0,242,254,.16);border-color:rgba(0,242,254,.5)}
+
+    /* ── CONTROLS ── */
+    .controls{
+      max-width:1100px;margin:20px auto 0;padding:0 24px;
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+    }
+    .search-wrap{flex:1;min-width:200px;position:relative}
+    .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+    input[type="search"]{
+      width:100%;background:var(--surf);
+      border:1px solid var(--border);border-radius:12px;
+      padding:11px 14px 11px 40px;
+      color:var(--text);font-family:'Inter',sans-serif;font-size:.875rem;
+      outline:none;transition:border-color .2s;
+    }
+    input[type="search"]:focus{border-color:var(--a1)}
+    input[type="search"]::placeholder{color:var(--muted)}
+    select{
+      background:var(--surf);border:1px solid var(--border);border-radius:12px;
+      padding:11px 14px;color:var(--text-dim);
+      font-family:'Inter',sans-serif;font-size:.875rem;
+      outline:none;cursor:pointer;transition:border-color .2s;
+    }
+    select:focus{border-color:var(--a1)}
+
+    /* ── REPOS GRID ── */
+    .grid{
+      max-width:1100px;margin:20px auto 80px;padding:0 24px;
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;
+    }
+
+    .card{
+      background:var(--surf);border:1px solid var(--border);
+      border-radius:16px;padding:20px;
+      display:flex;flex-direction:column;gap:10px;
+      text-decoration:none;color:inherit;
+      transition:border-color .2s,transform .2s,box-shadow .2s;
+    }
+    .card:hover{
+      border-color:rgba(79,172,254,.4);
+      transform:translateY(-2px);
+      box-shadow:0 8px 24px rgba(79,172,254,.06);
+    }
+    .card-top{display:flex;align-items:flex-start;gap:10px}
+    .repo-icon{flex-shrink:0;margin-top:2px;color:var(--muted)}
+    .repo-name{
+      font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:500;
+      color:var(--a1);word-break:break-word;
+    }
+    .fork-badge{
+      margin-left:auto;flex-shrink:0;font-size:.65rem;
+      padding:2px 8px;border:1px solid var(--border);border-radius:20px;color:var(--muted);
+    }
+    .repo-desc{font-size:.8rem;color:var(--muted);line-height:1.5;flex:1}
+    .topics{display:flex;flex-wrap:wrap;gap:5px}
+    .topic{
+      font-size:.68rem;padding:2px 9px;
+      background:rgba(79,172,254,.08);color:var(--a1);border-radius:20px;
+    }
+    .card-meta{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+    .meta-item{display:flex;align-items:center;gap:4px;font-size:.75rem;color:var(--muted)}
+    .lang-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+    .site-link{
+      margin-left:auto;font-size:.72rem;color:var(--a2);
+      text-decoration:none;display:flex;align-items:center;gap:4px;
+      opacity:.8;transition:opacity .2s;
+    }
+    .site-link:hover{opacity:1}
+
+    /* ── EMPTY / LOADING ── */
+    .state{max-width:1100px;margin:80px auto;padding:0 24px;text-align:center;color:var(--muted)}
+    .spinner{
+      width:36px;height:36px;
+      border:2px solid var(--border);border-top-color:var(--a1);
+      border-radius:50%;animation:spin .7s linear infinite;
+      margin:0 auto 16px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    footer{
+      text-align:center;padding:28px 24px;
+      color:var(--muted);font-size:.78rem;
+      border-top:1px solid var(--border);
+      position:relative;z-index:1;
+    }
+    footer a{color:var(--a1);text-decoration:none}
+
+    @media(max-width:520px){
+      h1{letter-spacing:-1px}
+      .controls{flex-direction:column}
+      select{width:100%}
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<header>
+  <div class="avatar-wrap">
+    <!-- animated dashed ring -->
+    <svg class="ring" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="68" cy="68" r="60" stroke="url(#rg)" stroke-width="1.5" stroke-dasharray="6 8" stroke-linecap="round"/>
+      <defs>
+        <linearGradient id="rg" x1="0" y1="0" x2="136" y2="136" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#4facfe"/>
+          <stop offset="100%" stop-color="#00f2fe" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <img class="avatar" id="avatar" src="" alt="Tofast78"/>
+  </div>
+
+  <p class="eyebrow">// developer · builder · creator</p>
+  <h1 id="h1-name">Tofast78</h1>
+  <p class="bio" id="bio">A carregar perfil…</p>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num" id="stat-repos">–</div><div class="stat-label">Repos</div></div>
+    <div class="stat"><div class="stat-num" id="stat-followers">–</div><div class="stat-label">Seguidores</div></div>
+    <div class="stat"><div class="stat-num" id="stat-stars">–</div><div class="stat-label">Stars</div></div>
+  </div>
+
+  <a class="gh-btn" href="https://github.com/Tofast78" target="_blank" rel="noopener">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.165c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    github.com/Tofast78
+  </a>
+</header>
+
+<div class="divider">
+  <span class="divider-label">🌐 Páginas ao vivo</span>
+  <div class="divider-line"></div>
+</div>
+<div class="pages-grid" id="pages-grid"></div>
+
+<div class="divider" style="margin-top:48px">
+  <span class="divider-label">📦 Repositórios</span>
+  <div class="divider-line"></div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="search" id="search" placeholder="Pesquisar…"/>
+  </div>
+  <select id="sort">
+    <option value="updated">Atualizado recentemente</option>
+    <option value="stars">Mais stars</option>
+    <option value="name">Nome A–Z</option>
+    <option value="forks">Mais forks</option>
+  </select>
+  <select id="lang-filter"><option value="">Todas as linguagens</option></select>
+</div>
+
+<div id="state" class="state"><div class="spinner"></div><p>A carregar…</p></div>
+<div class="grid" id="grid" style="display:none"></div>
+
+<footer>
+  Feito com ♥ por Tofast78 &nbsp;·&nbsp; Dados via <a href="https://api.github.com" target="_blank">GitHub API</a>
+</footer>
+
+<script>
+/* ── PARTICLE CANVAS ── */
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const ctx=c.getContext('2d');
+  const symbols=['{','}','<','>','/','=',';','(',')','=>','[]','&&','||','//'];
+  let W,H,dots=[];
+
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;dots=[]}
+  window.addEventListener('resize',resize);resize();
+
+  for(let i=0;i<55;i++) dots.push({
+    x:Math.random()*1920,y:Math.random()*1080,
+    vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.18,
+    sym:symbols[Math.floor(Math.random()*symbols.length)],
+    size:9+Math.random()*8,
+    op:0.04+Math.random()*.1,
+    color:Math.random()>.5?'#4facfe':'#00f2fe'
+  });
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    dots.forEach(d=>{
+      d.x+=d.vx;d.y+=d.vy;
+      if(d.x<-40)d.x=W+40;if(d.x>W+40)d.x=-40;
+      if(d.y<-40)d.y=H+40;if(d.y>H+40)d.y=-40;
+      ctx.font=`${d.size}px 'JetBrains Mono',monospace`;
+      ctx.fillStyle=d.color;ctx.globalAlpha=d.op;
+      ctx.fillText(d.sym,d.x,d.y);
+    });
+    ctx.globalAlpha=1;
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ── GITHUB DATA ── */
+const USER='Tofast78';
+const PORTFOLIO=`${USER}.github.io`.toLowerCase();
+const LANG_COLORS={JavaScript:'#f1e05a',TypeScript:'#3178c6',Python:'#3572A5',HTML:'#e34c26',CSS:'#563d7c',Java:'#b07219','C#':'#178600','C++':'#f34b7d',C:'#888',Ruby:'#701516',Go:'#00ADD8',Rust:'#dea584',PHP:'#4F5D95',Shell:'#89e051',Swift:'#fa7343',Kotlin:'#A97BFF',Dart:'#00B4AB',Vue:'#41b883'};
+
+let allRepos=[];
+
+async function fetchAll(url){
+  let res=[],p=1;
+  while(true){
+    const r=await fetch(`${url}?per_page=100&page=${p}`);
+    if(!r.ok)break;
+    const d=await r.json();
+    if(!d.length)break;
+    res=res.concat(d);
+    if(d.length<100)break;p++;
+  }
+  return res;
+}
+
+function pageUrl(r){
+  if(r.name.toLowerCase()===`${USER.toLowerCase()}.github.io`) return `https://${USER}.github.io`;
+  if(r.homepage&&r.homepage.includes('github.io')) return r.homepage;
+  if(r.has_pages) return `https://${USER}.github.io/${r.name}`;
+  return null;
+}
+
+async function init(){
+  try{
+    const [p,repos]=await Promise.all([
+      fetch(`https://api.github.com/users/${USER}`).then(r=>r.json()),
+      fetchAll(`https://api.github.com/users/${USER}/repos`)
+    ]);
+    document.getElementById('avatar').src=p.avatar_url;
+    document.getElementById('bio').textContent=p.bio||'Desenvolvedor no GitHub';
+    document.getElementById('stat-repos').textContent=p.public_repos;
+    document.getElementById('stat-followers').textContent=p.followers;
+    document.getElementById('stat-stars').textContent=repos.reduce((s,r)=>s+r.stargazers_count,0);
+
+    allRepos=repos;
+    const langs=[...new Set(repos.map(r=>r.language).filter(Boolean))].sort();
+    const sel=document.getElementById('lang-filter');
+    langs.forEach(l=>{const o=document.createElement('option');o.value=l;o.textContent=l;sel.appendChild(o)});
+
+    // Pages section
+    const pg=document.getElementById('pages-grid');
+    const prs=repos.filter(r=>r.name.toLowerCase()!==PORTFOLIO&&pageUrl(r));
+    if(!prs.length){
+      pg.innerHTML='<p style="color:var(--muted);padding:16px 0;font-size:.85rem">Nenhuma página ao vivo encontrada — ativa o GitHub Pages nos teus repos!</p>';
+    } else {
+      pg.innerHTML=prs.map(r=>{
+        const u=pageUrl(r);
+        const desc=r.description?`<p class="page-desc">${r.description}</p>`:'<p class="page-desc" style="font-style:italic;opacity:.5">Sem descrição</p>';
+        return `<a class="page-card" href="${u}" target="_blank" rel="noopener">
+          <div class="page-top">
+            <span class="live-badge"><span class="live-dot"></span>live</span>
+            <span class="page-name">${r.name}</span>
+          </div>
+          ${desc}
+          <span class="page-url">${u.replace('https://','')}</span>
+          <span class="open-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Abrir página
+          </span>
+        </a>`;
+      }).join('');
+    }
+
+    renderRepos();
+    document.getElementById('state').style.display='none';
+    document.getElementById('grid').style.display='grid';
+  }catch(e){
+    document.getElementById('state').innerHTML='<p>Erro ao carregar dados do GitHub.</p>';
+  }
+}
+
+function renderRepos(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const sort=document.getElementById('sort').value;
+  const lang=document.getElementById('lang-filter').value;
+
+  let list=allRepos.filter(r=>{
+    if(q&&!r.name.toLowerCase().includes(q)&&!(r.description||'').toLowerCase().includes(q))return false;
+    if(lang&&r.language!==lang)return false;
+    return true;
+  });
+
+  if(sort==='updated')list.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+  else if(sort==='stars')list.sort((a,b)=>b.stargazers_count-a.stargazers_count);
+  else if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='forks')list.sort((a,b)=>b.forks_count-a.forks_count);
+
+  const grid=document.getElementById('grid');
+  if(!list.length){grid.innerHTML='<p style="color:var(--muted);grid-column:1/-1;text-align:center;padding:40px 0">Nenhum repositório encontrado.</p>';return;}
+
+  grid.innerHTML=list.map(r=>{
+    const col=LANG_COLORS[r.language]||'#5a7a99';
+    const upd=new Date(r.updated_at).toLocaleDateString('pt-PT',{day:'2-digit',month:'short',year:'numeric'});
+    const desc=r.description?`<p class="repo-desc">${r.description}</p>`:'';
+    const topics=r.topics?.length?`<div class="topics">${r.topics.map(t=>`<span class="topic">${t}</span>`).join('')}</div>`:'';
+    const fork=r.fork?'<span class="fork-badge">fork</span>':'';
+    const hp=pageUrl(r);
+    const siteLink=hp?`<a class="site-link" href="${hp}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>site</a>`:'';
+
+    return `<a class="card" href="${r.html_url}" target="_blank" rel="noopener">
+      <div class="card-top">
+        <svg class="repo-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h6l2 2h10a2 2 0 012 2v12a2 2 0 01-2 2H3a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+        <span class="repo-name">${r.name}</span>${fork}
+      </div>
+      ${desc}${topics}
+      <div class="card-meta">
+        ${r.language?`<span class="meta-item"><span class="lang-dot" style="background:${col}"></span>${r.language}</span>`:''}
+        <span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${r.stargazers_count}</span>
+        <span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v1a2 2 0 01-2 2H8a2 2 0 01-2-2V9M12 15v-3"/></svg>${r.forks_count}</span>
+        <span class="meta-item">${upd}</span>
+        ${siteLink}
+      </div>
+    </a>`;
+  }).join('');
+}
+
+document.getElementById('search').addEventListener('input',renderRepos);
+document.getElementById('sort').addEventListener('change',renderRepos);
+document.getElementById('lang-filter').addEventListener('change',renderRepos);
+init();
+</script>
+</body>
+</html>
